@@ -20,7 +20,7 @@ module.exports.view = (req, res) => {
     });
 };
 
-module.exports.postCreate =  (req, res) => {
+module.exports.postCreate =  (req, res) => { 
     req.body.id = shortid.generate();
     db.get("users").push(req.body).write();
     res.redirect("/users");
