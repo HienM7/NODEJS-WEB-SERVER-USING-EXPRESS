@@ -3,16 +3,17 @@ const router = express.Router();
 
 const controller = require('../controllers/user.controller');
 const validate = require('../validate/user.validate');
+const authMiddleware = require('../middleware/auth.middleware');
 
-router.get('/', controller.index);
+router.get('/', authMiddleware.requireAuth, controller.index);
 
-router.get('/create', controller.create);
+router.get('/create', authMiddleware.requireAuth, controller.create);
 
-router.get('/view/:id', controller.view);
+router.get('/view/:id', authMiddleware.requireAuth, controller.view);
 
-router.post('/create', validate.postCreate, controller.postCreate);
+router.post('/create', authMiddleware.requireAuth, validate.postCreate, controller.postCreate);
 
-router.get("/search", controller.search);
+router.get("/search", authMiddleware.requireAuth, controller.search);
 
 
 
