@@ -3,8 +3,10 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
+
 const userRoute = require('./router/user.route');
 const authRoute = require('./router/auth.route');
+const productRoute = require('./router/product.route');
 
 const app = express();
 const port = 3000;
@@ -18,6 +20,7 @@ app.use(cookieParser(process.env.SESSION_SECRET));
 
 app.use('/users', userRoute);
 app.use('/auth', authRoute);
+app.use('/products', productRoute);
 
 app.use(express.static('public'));
 
