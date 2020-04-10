@@ -9,10 +9,18 @@ html
                 span.navbar-toggler-icon
             #navbarNav.collapse.navbar-collapse
                 ul.navbar-nav
-                    li.nav-item.active
+                    li.nav-item
                         a.nav-link(href='/') Home
                     li.nav-item
-                    a.nav-link(href='/users') Users
+                        a.nav-link(href='/users') Users
+                    li.nav-item
+                        a.nav-link(href='/products') Products
+                    li.nav-item
+                        if countCart
+                            a.nav-link(href='/cart')= "Cart(" + countCart + ")"
+                        else 
+                            a.nav-link(href='/cart')= "Cart"
+                            
         .container.pt-5
             block content
             block footer

@@ -8,12 +8,19 @@ block content
             input.form-control(type="text", name="q" value=q)
             button.btn.btn-primary Search
     table.table
-        tr
+        tr  
+            th Avatar   
             th Name
             th Phone
             th Actions
+
         each user in users
             tr 
+                td
+                    if !user.avatar
+                        img(src="/images/logo.jpg", width="64")
+                    else
+                        img(src=user.avatar, width="64")
                 td= user.name
                 td= user.phone
                 td

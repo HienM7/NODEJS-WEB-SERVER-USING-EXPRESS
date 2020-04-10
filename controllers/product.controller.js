@@ -8,6 +8,7 @@ module.exports.product = (req, res) => {
     const numOfProduct = 16;
     const start = (page - 1) * numOfProduct;
     const end = page * numOfProduct;
+    // console.log("///////////////////",db.get('products'))
     // const products = db.get('products').value().slice(start, end);
     const products = db.get('products').drop(start).take(numOfProduct).value();
     res.render('products/products.pug', {
