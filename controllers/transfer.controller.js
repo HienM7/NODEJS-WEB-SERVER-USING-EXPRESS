@@ -1,5 +1,7 @@
 const db = require("../db");
 const shortid = require('shortid');
+const Transfer = require('../models/transfer.model');
+
 
 module.exports.create = function(req, res, next) {
     res.render("transfer/create.pug", {
@@ -7,13 +9,14 @@ module.exports.create = function(req, res, next) {
     });
 }
 
-module.exports.createPost = function(req, res, next) {
+module.exports.createPost = async function(req, res, next) {
     const data = {
         account: req.body.account,
         amount: req.body.amount,
         id: shortid.generate(),
         userId: req.signedCookies.userId
     }
-    db.get('transfers').push(data).write();
+    const transfers = await Transfer.find();
+    await transfers.push(data).save();
     res.redirect('/transfer/create');
 }

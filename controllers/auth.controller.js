@@ -1,4 +1,4 @@
-const db = require("../db");
+const User = require('../models/user.model');
 
 module.exports.login = (req, res) => {
     if(req.signedCookies.userId) {
@@ -9,10 +9,10 @@ module.exports.login = (req, res) => {
     
 };
 
-module.exports.postLogin = (req, res) => {
+module.exports.postLogin = async (req, res) => {
     const email = req.body.email;
     const pass = req.body.pass;
-    const user = db.get("users").find({email: email}).value();
+    const user = await User.find({email: email});
 
     if(!user) {
         res.render("auth/login", {
@@ -23,7 +23,7 @@ module.exports.postLogin = (req, res) => {
         });
         return;
     }
-    if(user.pass !== pass) {
+    if(user[0].pass !== pass) {
         res.render('auth/login', {
             errors: [
                 "Password is incorrect"

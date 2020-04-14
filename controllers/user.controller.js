@@ -1,10 +1,11 @@
 const shortid = require('shortid');
-const db = require("../db");
+const User = require('../models/user.model');
 
-module.exports.index = (req, res) => {
-    res.render('./users/index', {
-        users: db.get("users").value()
-    });
+module.exports.index = async (req, res) => {
+  const users = await User.find();  
+  res.render('./users/index', {
+    users: users
+  });
 };
 
 module.exports.create = (req, res) => {
@@ -12,25 +13,26 @@ module.exports.create = (req, res) => {
 
 };
 
-module.exports.view = (req, res) => {
+module.exports.view = async (req, res) => {
     const id = req.params.id;
-    const user = db.get("users").find({id: id}).value();
+    const user = await User.find({_id: id});
     res.render('users/view', {
-        user: user
+        user: user[0]
     });
 };
 
-module.exports.postCreate =  (req, res) => { 
+module.exports.postCreate =  async (req, res) => { 
     req.body.id = shortid.generate();
     req.body.avatar = req.file.path.split("/").slice(1).join("/");
-    db.get("users").push(req.body).write();
+    await User.create(req.body);
     res.redirect("/users");
 };
 
-module.exports.search =  (req, res) => {
+module.exports.search =  async (req, res) => {
 
     const q = req.query.q;
-    const usersFind = db.get('users').value().filter(x => x.name.toLowerCase().indexOf(q.toLowerCase()) !== -1);
+    let usersFind = await User.find();
+    usersFind = Array.from(usersFind).filter(x => x.name.toLowerCase().indexOf(q.toLowerCase()) !== -1);
     res.render('./users/index', {
         users: usersFind,
         q: q

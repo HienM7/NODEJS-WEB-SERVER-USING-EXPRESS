@@ -1,6 +1,7 @@
 const db = require("../db");
+const Session = require('../models/session.model');
 
-module.exports.addToCart = function(req, res, next) {
+module.exports.addToCart = async function(req, res) {
     const productId = req.params.productId;
     const sessionId = req.signedCookies.sessionId;
 
@@ -8,16 +9,10 @@ module.exports.addToCart = function(req, res, next) {
         res.redirect('/products');
         return;
     }
-    let count = db
-    .get('sessions')
-    .find({id: sessionId})
-    .get('cart.' + productId, 0)
-    .value();
+    let count = await Session.find({id: sessionId})
+    count.get('cart.' + productId, 0);
     
-    db.get('sessions')
-    .find({id: sessionId})
-    .set('cart.' + productId, count + 1)
-    .write();
-    
+    let session = await Session.find({id: sessionId})
+    await session.set('cart.' + productId, count + 1).save();
     res.redirect('/products');
 }

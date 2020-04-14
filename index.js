@@ -2,10 +2,11 @@ require('dotenv').config();
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
 
 const csrf = require('csurf');
-
+const mongoose = require('mongoose');
+mongoose.connect(process.env.MONGO_URL);
 
 const userRoute = require('./router/user.route');
 const authRoute = require('./router/auth.route');
@@ -25,6 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(sessionLocals);
 
+app.use(express.static('public'));
 app.use('/users', userRoute);
 app.use('/auth', authRoute);
 app.use('/products', productRoute);
@@ -32,7 +34,7 @@ app.use('/cart', cartRoute);
 app.use(csrfProtection);
 app.use('/transfer', transferRoute);
 
-app.use(express.static('public'));
+
 
 app.get('/', (req, res) => {
     res.render('index', {
